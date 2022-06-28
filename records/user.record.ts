@@ -8,7 +8,7 @@ export class UserRecord implements UserEntity {
     lastname: string;
     password: string;
     address: string;
-    takenBooks: string[];
+    takenBooks: string[] | [];
 
 
     constructor(obj: NewUserEntity) {
@@ -24,8 +24,8 @@ export class UserRecord implements UserEntity {
             throw new ValidationError('Address field cannot be empty and longer than 1000');
         }
 
-        if(!obj.password || obj.password.length > 10) {
-            throw new ValidationError('Password field cannot be empty and longer than 1000');
+        if( obj.password.length < 6 || obj.password.length > 50 ) {
+            throw new ValidationError('Password field cannot be shorter than 6 and longer than 50');
         }
 
         this.firstname = obj.firstname;

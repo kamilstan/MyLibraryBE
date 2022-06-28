@@ -4,7 +4,7 @@ export interface UserEntity {
     firstname: string;
     lastname: string;
     address: string;
-    takenBooks: string[];
+    takenBooks: string[] | [];
 }
 
 export interface  NewUserEntity extends Omit<UserEntity, 'id'> {
