@@ -7,7 +7,7 @@ export class BookRecord implements BookEntity {
     author: string;
     description: string;
     review: number;
-    isAvailable: boolean;
+    count: number;
 
     constructor(obj: NewBookEntity) {
         if(!obj.title || obj.title.length > 200) {
@@ -30,7 +30,7 @@ export class BookRecord implements BookEntity {
         this.author = obj.author;
         this.description = obj.description;
         this.review = obj.review;
-        this.isAvailable = obj.isAvailable;
+        this.count = obj.count;
     }
 
 }

@@ -5,7 +5,7 @@ const defaultObj = {
     author: "Test author",
     description: "Test description.",
     review: 0,
-    isAvailable: true,
+    count: 1,
 }
 
 test("Can build BookRecord", () => {
@@ -15,7 +15,7 @@ test("Can build BookRecord", () => {
     expect(book.author).toBe("Test author");
     expect(book.description).toBe("Test description.");
     expect(book.review).toBe(0);
-    expect(book.isAvailable).toBe(true);
+    expect(book.count).toBe(1);
 })
 
 test("Validates incorrect title", () => {

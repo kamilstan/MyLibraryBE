@@ -4,7 +4,7 @@ export interface BookEntity {
     author: string;
     description: string;
     review: number;
-    isAvailable: boolean;
+    count: number;
 }
 
 export interface  NewBookEntity extends Omit<BookEntity, 'id'> {
