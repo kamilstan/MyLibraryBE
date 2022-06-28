@@ -1,7 +1,12 @@
 import {BookEntity, NewBookEntity} from "../types";
 import {ValidationError} from "../utils/errors";
+import {pool} from "../utils/db";
+import {FieldPacket} from "mysql2";
+
+type AdRecordResults = [BookEntity[], FieldPacket[]];
 
 export class BookRecord implements BookEntity {
+
     id: string;
     title: string;
     author: string;
@@ -26,11 +31,19 @@ export class BookRecord implements BookEntity {
             throw new ValidationError('Review field has to be a number');
         }
 
+        this.id = obj.id;
         this.title = obj.title;
         this.author = obj.author;
         this.description = obj.description;
         this.review = obj.review;
         this.count = obj.count;
+    }
+
+    static async getOne(id: string): Promise<BookRecord> | null {
+        const [results] = await pool.execute("SELECT * FROM `books` WHERE id = :id", {
+            id,
+        }) as AdRecordResults;
+        return results.length === 0 ? null : new BookRecord(results[0])
     }
 
 }
