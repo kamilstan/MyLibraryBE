@@ -2,6 +2,7 @@ import {BookEntity, NewBookEntity} from "../types";
 import {ValidationError} from "../utils/errors";
 import {pool} from "../utils/db";
 import {FieldPacket} from "mysql2";
+import {v4 as uuid} from "uuid";
 
 type AdRecordResults = [BookEntity[], FieldPacket[]];
 
@@ -44,6 +45,23 @@ export class BookRecord implements BookEntity {
             id,
         }) as AdRecordResults;
         return results.length === 0 ? null : new BookRecord(results[0])
+    }
+
+    static async findAll(title: string): Promise<BookRecord[]> {
+        const [results] = await pool.execute("SELECT * FROM `books` WHERE `title` LIKE :search", {
+            search: `%${title}%`
+        }) as AdRecordResults
+
+        return results.map(result => new BookRecord(result))
+    }
+
+    async insert() {
+        if (!this.id) {
+            this.id = uuid();
+        } else {
+            throw new ValidationError("Cannot insert something that already exists")
+        }
+        await pool.execute("INSERT INTO `books` (`id`, `title`, `author`, `description`, `review`, `count`) VALUES (:id, :title, :author, :description, :review, :count)", this)
     }
 
 }
