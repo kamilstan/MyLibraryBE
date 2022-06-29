@@ -55,7 +55,7 @@ export class BookRecord implements BookEntity {
         return results.map(result => new BookRecord(result))
     }
 
-    async insert() {
+    async insert(): Promise<void> {
         if (!this.id) {
             this.id = uuid();
         } else {
