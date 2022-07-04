@@ -4,7 +4,7 @@ import {pool} from "../utils/db";
 import {FieldPacket} from "mysql2";
 import {v4 as uuid} from "uuid";
 
-type AdRecordResults = [BookEntity[], FieldPacket[]];
+type BookRecordResults = [BookEntity[], FieldPacket[]];
 
 export class BookRecord implements BookEntity {
 
@@ -43,14 +43,14 @@ export class BookRecord implements BookEntity {
     static async getOne(id: string): Promise<BookRecord> | null {
         const [results] = await pool.execute("SELECT * FROM `books` WHERE id = :id", {
             id,
-        }) as AdRecordResults;
+        }) as BookRecordResults;
         return results.length === 0 ? null : new BookRecord(results[0])
     }
 
     static async findAll(title: string): Promise<BookRecord[]> {
         const [results] = await pool.execute("SELECT * FROM `books` WHERE `title` LIKE :search", {
             search: `%${title}%`
-        }) as AdRecordResults
+        }) as BookRecordResults
 
         return results.map(result => new BookRecord(result))
     }

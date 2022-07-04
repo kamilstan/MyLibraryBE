@@ -5,7 +5,6 @@ const defaultObj = {
     lastname: "Test lastname",
     password: "Test password",
     address: "Test address",
-    takenBooks: [''] as [] | string[],
 }
 
 test("Can build UserRecord", () => {
@@ -15,7 +14,6 @@ test("Can build UserRecord", () => {
     expect(user.lastname).toBe("Test lastname");
     expect(user.password).toBe("Test password");
     expect(user.address).toBe("Test address");
-    expect(user.takenBooks).toContain('');
 })
 
 test("Validates incorrect firstname", () => {

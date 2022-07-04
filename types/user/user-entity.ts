@@ -1,10 +1,9 @@
 export interface UserEntity {
     id: string;
-    password: string;
     firstname: string;
     lastname: string;
     address: string;
-    takenBooks: string[] | [];
+    password: string;
 }
 
 export interface  NewUserEntity extends Omit<UserEntity, 'id'> {

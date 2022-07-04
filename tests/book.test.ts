@@ -36,7 +36,7 @@ test('BookRecord.findAll returns an array of found entries from database.', asyn
     expect(books[0].id).toBeDefined();
 });
 
-test('BookRecord.findAll returns an array of found entries from database when searching for a.', async () => {
+test('BookRecord.findAll returns an array of found entries from database when searching for t.', async () => {
     const books = await BookRecord.findAll('t');
 
     expect(books).not.toEqual([]);
