@@ -64,4 +64,9 @@ export class BookRecord implements BookEntity {
         await pool.execute("INSERT INTO `books` (`id`, `title`, `author`, `description`, `review`, `count`) VALUES (:id, :title, :author, :description, :review, :count)", this)
     }
 
+    async delete():Promise<void> {
+        await pool.execute("DELETE FROM `books` WHERE `id` =:id", {
+            id: this.id})
+    }
+
 }

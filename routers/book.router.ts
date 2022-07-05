@@ -1,5 +1,6 @@
 import {Router} from "express";
 import {BookRecord} from "../records/book.record";
+import {ValidationError} from "../utils/errors";
 
 export const bookRouter = Router()
 
@@ -17,5 +18,16 @@ export const bookRouter = Router()
         const book = new BookRecord(req.body);
             await book.insert()
         res.json(book)
+    })
+
+    .delete('/:id', async (req, res) => {
+        const book = await BookRecord.getOne(req.params.id);
+
+        if(!book) {
+            throw new ValidationError('There is no such book.')
+        }
+
+        await book.delete();
+        res.end();
     })
 

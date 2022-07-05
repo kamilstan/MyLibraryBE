@@ -68,3 +68,12 @@ test('BookRecord.insert inserts data to database.', async () => {
     expect(foundBook).not.toBeNull();
     expect(foundBook.id).toBe(book.id);
 })
+
+test('BookRecord.delete deletes a record from database when we delete a record which exists', async () => {
+    const book = await BookRecord.getOne("w");
+    await book.delete();
+    const deletedBook = await BookRecord.getOne("w");
+
+    expect(deletedBook).toEqual(null);
+})
+

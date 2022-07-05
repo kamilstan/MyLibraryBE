@@ -62,5 +62,10 @@ export class UserRecord implements UserEntity {
         await pool.execute("INSERT INTO `users` (`id`, `firstname`, `lastname`, `address`, `password`) VALUES (:id, :firstname, :lastname, :address, :password)", this)
     }
 
+    async delete():Promise<void> {
+        await pool.execute("DELETE FROM `users` WHERE `id` =:id", {
+            id: this.id})
+    }
+
 
 }

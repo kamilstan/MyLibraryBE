@@ -1,5 +1,6 @@
 import {pool} from "../utils/db";
 import {UserRecord} from "../records/user.record";
+import {BookRecord} from "../records/book.record";
 
 
 const defaultObj = {
@@ -66,4 +67,12 @@ test('UserRecord.insert inserts data to database.', async () => {
     expect(foundUser).toBeDefined();
     expect(foundUser).not.toBeNull();
     expect(foundUser.id).toBe(user.id);
+})
+
+test('UserRecord.delete deletes a record from database when we delete a record which exists', async () => {
+    const user = await UserRecord.getOne("654321");
+    await user.delete();
+    const deletedUser = await BookRecord.getOne("654321");
+
+    expect(deletedUser).toEqual(null);
 })
