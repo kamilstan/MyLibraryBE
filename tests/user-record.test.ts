@@ -5,6 +5,10 @@ const defaultObj = {
     lastname: "Test lastname",
     password: "Test password",
     address: "Test address",
+    email: 'a@w.p',
+    username: 'byku',
+    bookId: '',
+    currentTokenId: '',
 }
 
 test("Can build UserRecord", () => {

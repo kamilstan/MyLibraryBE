@@ -8,6 +8,10 @@ const defaultObj = {
     lastname: "Test author",
     address: "Test description.",
     password: "123456",
+    email: 'a@w.p',
+    username: 'byku',
+    bookId: '',
+    currentTokenId: '',
 }
 
 afterAll(async () => {

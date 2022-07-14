@@ -4,10 +4,11 @@ import {ValidationError} from "../utils/errors";
 import {hashPwd} from "../utils/has-pwd";
 import jwt from "jsonwebtoken";
 import 'dotenv/config';
+import {verifyJWT} from "../utils/verifyJWT";
 
 export const userRouter = Router()
 
-    .get('/search/:lastname?',  async (req, res) => {
+    .get('/search/:lastname?', async (req, res) => {
         const users = await UserRecord.findAll(req.params.lastname ?? '')
         res.json(users)
     })
@@ -37,31 +38,32 @@ export const userRouter = Router()
             throw new ValidationError("Wrong password!")
         }
 
-
         const payload = {
-            email: user.email,
-            id: user.id,
-        }
-        const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET ,{expiresIn: '30s'});
+            "email": user.email,
+            "id": user.id,
+        } ;
+
+        const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET ,{expiresIn: '5m'});
         const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET ,{expiresIn: '1d'});
         user.currentTokenId = refreshToken === null ? null : refreshToken;
         await user.update();
 
         res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
+            // httpOnly: true,
             maxAge: 24 * 60 * 60 * 1000,
         })
 
-        res.json({accessToken});
+        res.json({accessToken, refreshToken});
     })
+
 
     .delete('/logout', async(req, res) => {
 
-        const accessToken = req.cookies.accessToken;
-        if(!accessToken) {
+        const {refreshToken} = req.body;
+        if(!refreshToken) {
             throw new ValidationError("There is no such token.")
         };
-        const user = await UserRecord.getOneWithToken(accessToken);
+        const user = await UserRecord.getOneWithToken(refreshToken);
         if(!user) {
             throw new ValidationError("There is no such user.")
         }

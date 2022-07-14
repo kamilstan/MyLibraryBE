@@ -27,9 +27,9 @@ export const bookRouter = Router()
             throw new ValidationError('There is no such book.')
         }
 
-        if(await book.countGivenBooks() > 0) {
-            throw new ValidationError('Cannot remove taken book')
-        }
+        // if(await book.countGivenBooks() > 0) {
+        //     throw new ValidationError('Cannot remove taken book')
+        // }
 
         await book.delete();
         res.end();
