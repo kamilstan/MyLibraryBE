@@ -12,6 +12,10 @@ export class UserRecord implements UserEntity {
     lastname: string;
     password: string;
     address: string;
+    email: string;
+    username: string;
+    bookId: string | null;
+    currentTokenId: string | null;
 
 
     constructor(obj: NewUserEntity) {
@@ -27,8 +31,8 @@ export class UserRecord implements UserEntity {
             throw new ValidationError('Address field cannot be empty and longer than 1000');
         }
 
-        if( obj.password.length < 6 || obj.password.length > 50 ) {
-            throw new ValidationError('Password field cannot be shorter than 6 and longer than 50');
+        if( obj.password.length < 6) {
+            throw new ValidationError('Password field cannot be shorter than 6');
         }
 
         this.id = obj.id;
@@ -36,11 +40,30 @@ export class UserRecord implements UserEntity {
         this.lastname = obj.lastname;
         this.password = obj.password;
         this.address = obj.address;
+        this.email = obj.email;
+        this.username = obj.username;
+        this.bookId= obj.username;
+        this.currentTokenId = obj.currentTokenId;
+
     }
 
     static async getOne(id: string): Promise<UserRecord> | null {
         const [results] = await pool.execute("SELECT * FROM `users` WHERE id = :id", {
             id,
+        }) as UserRecordResults;
+        return results.length === 0 ? null : new UserRecord(results[0])
+    }
+
+    static async getOneWithEmail(email: string): Promise<UserRecord> | null {
+        const [results] = await pool.execute("SELECT * FROM `users` WHERE email = :email", {
+            email,
+        }) as UserRecordResults;
+        return results.length === 0 ? null : new UserRecord(results[0])
+    }
+
+    static async getOneWithToken(currentTokenId: string): Promise<UserRecord> | null {
+        const [results] = await pool.execute("SELECT * FROM `users` WHERE currentTokenId = :currentTokenId", {
+            currentTokenId,
         }) as UserRecordResults;
         return results.length === 0 ? null : new UserRecord(results[0])
     }
@@ -59,7 +82,7 @@ export class UserRecord implements UserEntity {
         } else {
             throw new ValidationError("Cannot insert somebody that already exists")
         }
-        await pool.execute("INSERT INTO `users` (`id`, `firstname`, `lastname`, `address`, `password`) VALUES (:id, :firstname, :lastname, :address, :password)", this)
+        await pool.execute("INSERT INTO `users` (`id`, `firstname`, `lastname`, `address`, `password`, `email`, `username`) VALUES (:id, :firstname, :lastname, :address, :password, :email, :username)", this)
     }
 
     async delete():Promise<void> {
@@ -67,5 +90,18 @@ export class UserRecord implements UserEntity {
             id: this.id})
     }
 
+    async update():Promise<void> {
+        await pool.execute("UPDATE `users` SET `firstname` = :firstname, `lastname` = :lastname, `address` = :address, `password` = :password, `email` = :email, `username` = :username, `currentTokenId` = :currentTokenId WHERE `id` = :id", {
+            id: this.id,
+            firstname: this.firstname,
+            lastname: this.lastname,
+            address: this.address,
+            password: this.password,
+            email: this.email,
+            username: this.username,
+            // bookId: this.bookId,
+            currentTokenId: this.currentTokenId,
+        });
+    }
 
 }

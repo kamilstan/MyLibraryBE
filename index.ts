@@ -5,6 +5,9 @@ import {handleError, ValidationError} from "./utils/errors";
 import rateLimit from "express-rate-limit";
 import {bookRouter} from "./routers/book.router";
 import {userRouter} from "./routers/user.router";
+import cookieParser from "cookie-parser";
+
+
 
 const app = express()
 
@@ -12,6 +15,7 @@ app.use(cors({
     origin: "http://localhost:3000",
 }))
 app.use(express.json());
+app.use(cookieParser());
 
 // app.use(rateLimit({
 //     windowMs: 5 * 60 * 1000, // 15 minutes

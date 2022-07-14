@@ -69,4 +69,11 @@ export class BookRecord implements BookEntity {
             id: this.id})
     }
 
+    // async countGivenBooks():Promise<number> {
+    //     const [[{count}]] /* answer[0][0].count */ = (await pool.execute("SELECT COUNT(*) AS `count` FROM `users` WHERE `bookId` = :id", {
+    //         id: this.id,
+    //     })) as BookRecordResults;
+    //     return count;
+    // }
+
 }
