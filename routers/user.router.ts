@@ -1,10 +1,9 @@
 import {Router} from "express";
 import {UserRecord} from "../records/user.record";
-import {BookRecord} from "../records/book.record";
 import {ValidationError} from "../utils/errors";
-import {SetBookForUserReq} from "../types"
 import {hashPwd} from "../utils/has-pwd";
 import jwt from "jsonwebtoken";
+import 'dotenv/config';
 
 export const userRouter = Router()
 
@@ -43,14 +42,13 @@ export const userRouter = Router()
             email: user.email,
             id: user.id,
         }
-        const accessToken = jwt.sign(payload, "secretKey",{expiresIn: '30s'});
-        const refreshToken = jwt.sign(payload, "secretKey",{expiresIn: '1d'});
+        const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET ,{expiresIn: '30s'});
+        const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET ,{expiresIn: '1d'});
         user.currentTokenId = refreshToken === null ? null : refreshToken;
         await user.update();
-        console.log(user);
 
         res.cookie('refreshToken', refreshToken, {
-            // httpOnly: true,
+            httpOnly: true,
             maxAge: 24 * 60 * 60 * 1000,
         })
 
