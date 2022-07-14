@@ -1,4 +1,4 @@
-import express from "express";
+import express, {Router} from "express";
 import cors from "cors";
 import "express-async-errors";
 import {handleError, ValidationError} from "./utils/errors";
@@ -22,8 +22,12 @@ app.use(cookieParser());
 //     max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes))
 // }));
 
-app.use('/book', bookRouter);
-app.use('/user', userRouter);
+const router = Router();
+
+router.use('/book', bookRouter);
+router.use('/user', userRouter);
+
+app.use('/api', router);
 
 app.use(handleError);
 
